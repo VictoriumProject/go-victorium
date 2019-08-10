@@ -1,8 +1,8 @@
 package core
 
 import (
-	"github.com/ethereumproject/go-ethereum/core/assets"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
+	"github.com/VictoriumProject/go-victorium/core/assets"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
 )
 
 var (

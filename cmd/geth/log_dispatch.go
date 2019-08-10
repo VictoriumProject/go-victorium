@@ -7,11 +7,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/ethereumproject/go-ethereum/core"
-	"github.com/ethereumproject/go-ethereum/eth"
-	"github.com/ethereumproject/go-ethereum/eth/downloader"
-	"github.com/ethereumproject/go-ethereum/event"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
+	"github.com/VictoriumProject/go-victorium/core"
+	"github.com/VictoriumProject/go-victorium/eth"
+	"github.com/VictoriumProject/go-victorium/eth/downloader"
+	"github.com/VictoriumProject/go-victorium/event"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -21,6 +21,7 @@ var availableLogStatusFeatures = map[string]time.Duration{
 	"sync": time.Duration(0),
 }
 
+// lsMode represents the current behavior of the client.
 type lsMode uint
 
 const (

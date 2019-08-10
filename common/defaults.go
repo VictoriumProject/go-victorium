@@ -24,9 +24,9 @@ import (
 const (
 	DefaultIPCSocket = "geth.ipc"  // Default (relative) name of the IPC RPC socket
 	DefaultHTTPHost  = "localhost" // Default host interface for the HTTP RPC server
-	DefaultHTTPPort  = 8545        // Default TCP port for the HTTP RPC server
+	DefaultHTTPPort  = 8555        // Default TCP port for the HTTP RPC server
 	DefaultWSHost    = "localhost" // Default host interface for the websocket RPC server
-	DefaultWSPort    = 8546        // Default TCP port for the websocket RPC server
+	DefaultWSPort    = 8556        // Default TCP port for the websocket RPC server
 )
 
 func defaultDataDirParent() string {
@@ -47,21 +47,21 @@ func defaultDataDirParent() string {
 
 func defaultClassicDataDir() string {
 	if runtime.GOOS == "darwin" {
-		return "EthereumClassic"
+		return "Victorium"
 	} else if runtime.GOOS == "windows" {
-		return "EthereumClassic"
+		return "Victorium"
 	} else {
-		return ".ethereum-classic"
+		return ".victorium"
 	}
 }
 
 func defaultUnclassicDataDir() string {
 	if runtime.GOOS == "darwin" {
-		return "Ethereum"
+		return "Victorium"
 	} else if runtime.GOOS == "windows" {
-		return "Ethereum"
+		return "Victorium"
 	} else {
-		return ".ethereum"
+		return ".victorium"
 	}
 }
 

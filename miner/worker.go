@@ -24,16 +24,16 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/ethereumproject/go-ethereum/accounts"
-	"github.com/ethereumproject/go-ethereum/common"
-	"github.com/ethereumproject/go-ethereum/core"
-	"github.com/ethereumproject/go-ethereum/core/state"
-	"github.com/ethereumproject/go-ethereum/core/types"
-	"github.com/ethereumproject/go-ethereum/core/vm"
-	"github.com/ethereumproject/go-ethereum/ethdb"
-	"github.com/ethereumproject/go-ethereum/event"
-	"github.com/ethereumproject/go-ethereum/logger"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
+	"github.com/VictoriumProject/go-victorium/accounts"
+	"github.com/VictoriumProject/go-victorium/common"
+	"github.com/VictoriumProject/go-victorium/core"
+	"github.com/VictoriumProject/go-victorium/core/state"
+	"github.com/VictoriumProject/go-victorium/core/types"
+	"github.com/VictoriumProject/go-victorium/core/vm"
+	"github.com/VictoriumProject/go-victorium/ethdb"
+	"github.com/VictoriumProject/go-victorium/event"
+	"github.com/VictoriumProject/go-victorium/logger"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
 	"gopkg.in/fatih/set.v0"
 )
 
@@ -333,12 +333,12 @@ func (self *worker) wait() {
 				work.localMinedBlocks = newLocalMinedBlock(block.Number().Uint64(), work.localMinedBlocks)
 			}
 			if logger.MlogEnabled() {
-				mlogMiner.Send(mlogMinerMineBlock.SetDetailValues(
+				mlogMinerMineBlock.AssignDetails(
 					block.Number(),
 					block.Hash().Hex(),
 					staleOrConfirmMsg,
 					miningLogAtDepth,
-				))
+				).Send(mlogMiner)
 			}
 			glog.V(logger.Info).Infof("🔨  Mined %sblock (#%v / %x). %s", stale, block.Number(), block.Hash().Bytes()[:4], confirm)
 
@@ -438,9 +438,9 @@ func (self *worker) logLocalMinedBlocks(current, previous *Work) {
 			inspectBlockNum := checkBlockNum - miningLogAtDepth
 			if self.isBlockLocallyMined(current, inspectBlockNum) {
 				if logger.MlogEnabled() {
-					mlogMiner.Send(mlogMinerConfirmMinedBlock.SetDetailValues(
+					mlogMinerConfirmMinedBlock.AssignDetails(
 						inspectBlockNum,
-					))
+					).Send(mlogMiner)
 				}
 				glog.V(logger.Info).Infof("🔨 🔗  Mined %d blocks back: block #%v", miningLogAtDepth, inspectBlockNum)
 			}
@@ -566,12 +566,12 @@ func (self *worker) commitNewWork() {
 	if atomic.LoadInt32(&self.mining) == 1 {
 		elapsed := time.Since(tstart)
 		if logger.MlogEnabled() {
-			mlogMiner.Send(mlogMinerCommitWorkBlock.SetDetailValues(
+			mlogMinerCommitWorkBlock.AssignDetails(
 				work.Block.Number(),
 				work.tcount,
 				len(uncles),
 				elapsed,
-			))
+			).Send(mlogMiner)
 		}
 		glog.V(logger.Info).Infof("commit new work on block %v with %d txs & %d uncles. Took %v\n", work.Block.Number(), work.tcount, len(uncles), elapsed)
 		self.logLocalMinedBlocks(work, previous)
@@ -584,11 +584,11 @@ func (self *worker) commitUncle(work *Work, uncle *types.Header) error {
 	var e error
 	if logger.MlogEnabled() {
 		defer func() {
-			mlogMiner.Send(mlogMinerCommitUncle.SetDetailValues(
+			mlogMinerCommitUncle.AssignDetails(
 				uncle.Number,
 				hash.Hex(),
 				e,
-			))
+			).Send(mlogMiner)
 		}()
 	}
 	if work.uncles.Has(hash) {
@@ -696,11 +696,11 @@ func (env *Work) commitTransaction(tx *types.Transaction, bc *core.BlockChain, g
 
 	if logger.MlogEnabled() {
 		defer func() {
-			mlogMiner.Send(mlogMinerCommitTx.SetDetailValues(
+			mlogMinerCommitTx.AssignDetails(
 				env.header.Number,
 				tx.Hash().Hex(),
 				err,
-			))
+			).Send(mlogMiner)
 		}()
 	}
 

@@ -19,7 +19,7 @@ package vm
 import (
 	"math/big"
 
-	"github.com/ethereumproject/go-ethereum/common"
+	"github.com/VictoriumProject/go-victorium/common"
 )
 
 // RuleSet is an interface that defines the current rule set during the

@@ -24,12 +24,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereumproject/go-ethereum/common"
-	"github.com/ethereumproject/go-ethereum/core/state"
-	"github.com/ethereumproject/go-ethereum/core/types"
-	"github.com/ethereumproject/go-ethereum/event"
-	"github.com/ethereumproject/go-ethereum/logger"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
+	"github.com/VictoriumProject/go-victorium/common"
+	"github.com/VictoriumProject/go-victorium/core/state"
+	"github.com/VictoriumProject/go-victorium/core/types"
+	"github.com/VictoriumProject/go-victorium/event"
+	"github.com/VictoriumProject/go-victorium/logger"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
 )
 
 var (
@@ -226,10 +226,10 @@ func (pool *TxPool) SetLocal(tx *types.Transaction) {
 func (pool *TxPool) validateTx(tx *types.Transaction) (e error) {
 	local := pool.localTx.contains(tx.Hash())
 	defer func() {
-		mlogTxPool.Send(mlogTxPoolValidateTx.SetDetailValues(
+		mlogTxPoolValidateTx.AssignDetails(
 			tx.Hash().Hex(),
 			e,
-		))
+		).Send(mlogTxPool)
 	}()
 	// Drop transactions under our own minimal accepted gas price
 	if !local && pool.minGasPrice.Cmp(tx.GasPrice()) > 0 {
@@ -319,12 +319,12 @@ func (self *TxPool) add(tx *types.Transaction) error {
 	from := common.Bytes2Hex(f[:4])
 
 	if logger.MlogEnabled() {
-		mlogTxPool.Send(mlogTxPoolAddTx.SetDetailValues(
+		mlogTxPoolAddTx.AssignDetails(
 			f.Hex(),
 			toLogName,
 			tx.Value,
 			hash.Hex(),
-		))
+		).Send(mlogTxPool)
 	}
 	if glog.V(logger.Debug) {
 		glog.Infof("(t) %x => %s (%v) %x\n", from, toName, tx.Value, hash)

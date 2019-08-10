@@ -27,9 +27,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/ethereumproject/go-ethereum/internal/jsre"
-	"github.com/ethereumproject/go-ethereum/internal/web3ext"
-	"github.com/ethereumproject/go-ethereum/rpc"
+	"github.com/VictoriumProject/go-victorium/internal/jsre"
+	"github.com/VictoriumProject/go-victorium/internal/web3ext"
+	"github.com/VictoriumProject/go-victorium/rpc"
 	"github.com/peterh/liner"
 	"github.com/robertkrimen/otto"
 )

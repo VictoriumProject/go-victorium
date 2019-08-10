@@ -28,14 +28,14 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/ethereumproject/go-ethereum/common"
-	"github.com/ethereumproject/go-ethereum/core/types"
-	"github.com/ethereumproject/go-ethereum/ethdb"
-	"github.com/ethereumproject/go-ethereum/event"
-	"github.com/ethereumproject/go-ethereum/logger"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
-	"github.com/ethereumproject/go-ethereum/metrics"
-	"github.com/ethereumproject/go-ethereum/trie"
+	"github.com/VictoriumProject/go-victorium/common"
+	"github.com/VictoriumProject/go-victorium/core/types"
+	"github.com/VictoriumProject/go-victorium/ethdb"
+	"github.com/VictoriumProject/go-victorium/event"
+	"github.com/VictoriumProject/go-victorium/logger"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
+	"github.com/VictoriumProject/go-victorium/metrics"
+	"github.com/VictoriumProject/go-victorium/trie"
 )
 
 const (
@@ -275,11 +275,11 @@ func (d *Downloader) RegisterPeer(id string, version int, name string, currentHe
 	var err error
 	defer func() {
 		if logger.MlogEnabled() {
-			mlogDownloader.Send(mlogDownloaderRegisterPeer.SetDetailValues(
+			mlogDownloaderRegisterPeer.AssignDetails(
 				id,
 				version,
 				err,
-			))
+			).Send(mlogDownloader)
 		}
 	}()
 
@@ -302,10 +302,10 @@ func (d *Downloader) UnregisterPeer(id string) error {
 	var err error
 	defer func() {
 		if logger.MlogEnabled() {
-			mlogDownloader.Send(mlogDownloaderUnregisterPeer.SetDetailValues(
+			mlogDownloaderUnregisterPeer.AssignDetails(
 				id,
 				err,
-			))
+			).Send(mlogDownloader)
 		}
 	}()
 
@@ -1537,11 +1537,11 @@ func (d *Downloader) qosTuner() {
 		// Log the new QoS values and sleep until the next RTT
 		ttl := d.requestTTL()
 		if logger.MlogEnabled() {
-			mlogDownloader.Send(mlogDownloaderTuneQOS.SetDetailValues(
+			mlogDownloaderTuneQOS.AssignDetails(
 				rtt,
 				float64(conf)/1000000.0,
 				ttl,
-			))
+			).Send(mlogDownloader)
 		}
 		glog.V(logger.Debug).Infof("Quality of service: rtt %v, conf %.3f, ttl %v", rtt, float64(conf)/1000000.0, ttl)
 

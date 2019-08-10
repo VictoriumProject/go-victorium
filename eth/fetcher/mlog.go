@@ -1,14 +1,14 @@
 package fetcher
 
-import "github.com/ethereumproject/go-ethereum/logger"
+import "github.com/VictoriumProject/go-victorium/logger"
 
 var mlogFetcher = logger.MLogRegisterAvailable("fetcher", mLogLines)
 
 var mLogLines = []logger.MLogT{
-	mlogFetcherDiscardAnnouncement,
+	*mlogFetcherDiscardAnnouncement,
 }
 
-var mlogFetcherDiscardAnnouncement = logger.MLogT{
+var mlogFetcherDiscardAnnouncement = &logger.MLogT{
 	Description: "Called when a block announcement is discarded.",
 	Receiver:    "FETCHER",
 	Verb:        "DISCARD",

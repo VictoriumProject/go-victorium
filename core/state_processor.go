@@ -22,16 +22,16 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ethereumproject/go-ethereum/core/state"
-	"github.com/ethereumproject/go-ethereum/core/types"
-	"github.com/ethereumproject/go-ethereum/core/vm"
-	"github.com/ethereumproject/go-ethereum/crypto"
-	"github.com/ethereumproject/go-ethereum/logger"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
+	"github.com/VictoriumProject/go-victorium/core/state"
+	"github.com/VictoriumProject/go-victorium/core/types"
+	"github.com/VictoriumProject/go-victorium/core/vm"
+	"github.com/VictoriumProject/go-victorium/crypto"
+	"github.com/VictoriumProject/go-victorium/logger"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
 )
 
 var (
-	MaximumBlockReward       = big.NewInt(5e+18) // that's shiny 5 ether
+	MaximumBlockReward       = big.NewInt(6.25e+18) // that's shiny 5 ether
 	big8                     = big.NewInt(8)
 	big32                    = big.NewInt(32)
 	DisinflationRateQuotient = big.NewInt(4)

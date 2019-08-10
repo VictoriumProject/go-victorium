@@ -22,12 +22,12 @@ import (
 	"io"
 	"math/big"
 
-	"github.com/ethereumproject/go-ethereum/common"
-	"github.com/ethereumproject/go-ethereum/crypto"
-	"github.com/ethereumproject/go-ethereum/logger"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
-	"github.com/ethereumproject/go-ethereum/rlp"
-	"github.com/ethereumproject/go-ethereum/trie"
+	"github.com/VictoriumProject/go-victorium/common"
+	"github.com/VictoriumProject/go-victorium/crypto"
+	"github.com/VictoriumProject/go-victorium/logger"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
+	"github.com/VictoriumProject/go-victorium/rlp"
+	"github.com/VictoriumProject/go-victorium/trie"
 )
 
 var emptyCodeHash = crypto.Keccak256(nil)
@@ -227,12 +227,12 @@ func (c *StateObject) AddBalance(amount *big.Int) {
 	}
 	c.SetBalance(new(big.Int).Add(c.Balance(), amount))
 	if logger.MlogEnabled() {
-		mlogState.Send(mlogStateAddBalanceObject.SetDetailValues(
+		mlogStateAddBalanceObject.AssignDetails(
 			c.Address().Hex(),
 			c.Nonce(),
 			c.Balance(),
 			amount,
-		))
+		).Send(mlogState)
 	}
 	if glog.V(logger.Detail) {
 		glog.Infof("%x: #%d %v (+ %v)\n", c.Address(), c.Nonce(), c.Balance(), amount)
@@ -245,12 +245,12 @@ func (c *StateObject) SubBalance(amount *big.Int) {
 	}
 	c.SetBalance(new(big.Int).Sub(c.Balance(), amount))
 	if logger.MlogEnabled() {
-		mlogState.Send(mlogStateSubBalanceObject.SetDetailValues(
+		mlogStateSubBalanceObject.AssignDetails(
 			c.Address().Hex(),
 			c.Nonce(),
 			c.Balance(),
 			amount,
-		))
+		).Send(mlogState)
 	}
 	if glog.V(logger.Detail) {
 		glog.Infof("%x: #%d %v (- %v)\n", c.Address(), c.Nonce(), c.Balance(), amount)

@@ -22,15 +22,15 @@ import (
 	"math/big"
 	"sync/atomic"
 
-	"github.com/ethereumproject/go-ethereum/common"
-	"github.com/ethereumproject/go-ethereum/core"
-	"github.com/ethereumproject/go-ethereum/core/state"
-	"github.com/ethereumproject/go-ethereum/core/types"
-	"github.com/ethereumproject/go-ethereum/eth/downloader"
-	"github.com/ethereumproject/go-ethereum/event"
-	"github.com/ethereumproject/go-ethereum/logger"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
-	"github.com/ethereumproject/go-ethereum/pow"
+	"github.com/VictoriumProject/go-victorium/common"
+	"github.com/VictoriumProject/go-victorium/core"
+	"github.com/VictoriumProject/go-victorium/core/state"
+	"github.com/VictoriumProject/go-victorium/core/types"
+	"github.com/VictoriumProject/go-victorium/eth/downloader"
+	"github.com/VictoriumProject/go-victorium/event"
+	"github.com/VictoriumProject/go-victorium/logger"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
+	"github.com/VictoriumProject/go-victorium/pow"
 )
 
 // HeaderExtra is a freeform description.
@@ -125,10 +125,10 @@ func (self *Miner) Start(coinbase common.Address, threads int) {
 		self.worker.register(NewCpuAgent(i, self.pow))
 	}
 
-	mlogMiner.Send(mlogMinerStart.SetDetailValues(
+	mlogMinerStart.AssignDetails(
 		coinbase.Hex(),
 		threads,
-	))
+	).Send(mlogMiner)
 	glog.V(logger.Info).Infof("Starting mining operation (CPU=%d TOT=%d)\n", threads, len(self.worker.agents))
 
 	self.worker.start()
@@ -141,10 +141,10 @@ func (self *Miner) Stop() {
 	atomic.StoreInt32(&self.mining, 0)
 	atomic.StoreInt32(&self.shouldStart, 0)
 	if logger.MlogEnabled() {
-		mlogMiner.Send(mlogMinerStop.SetDetailValues(
+		mlogMinerStop.AssignDetails(
 			self.coinbase.Hex(),
 			self.threads,
-		))
+		).Send(mlogMiner)
 	}
 }
 

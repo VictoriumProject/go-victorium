@@ -1,15 +1,15 @@
 package p2p
 
-import "github.com/ethereumproject/go-ethereum/logger"
+import "github.com/VictoriumProject/go-victorium/logger"
 
 var mlogServer = logger.MLogRegisterAvailable("server", mLogLines)
 
 var mLogLines = []logger.MLogT{
-	mlogServerPeerAdded,
-	mlogServerPeerRemove,
+	*mlogServerPeerAdded,
+	*mlogServerPeerRemove,
 }
 
-var mlogServerPeerAdded = logger.MLogT{
+var mlogServerPeerAdded = &logger.MLogT{
 	Description: "Called once when a peer is added.",
 	Receiver:    "SERVER",
 	Verb:        "ADD",
@@ -22,7 +22,7 @@ var mlogServerPeerAdded = logger.MLogT{
 	},
 }
 
-var mlogServerPeerRemove = logger.MLogT{
+var mlogServerPeerRemove = &logger.MLogT{
 	Description: "Called once when a peer is removed.",
 	Receiver:    "SERVER",
 	Verb:        "REMOVE",

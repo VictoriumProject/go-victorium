@@ -23,14 +23,14 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/ethereumproject/go-ethereum/common"
-	"github.com/ethereumproject/go-ethereum/core/vm"
-	"github.com/ethereumproject/go-ethereum/crypto"
-	"github.com/ethereumproject/go-ethereum/ethdb"
-	"github.com/ethereumproject/go-ethereum/logger"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
-	"github.com/ethereumproject/go-ethereum/rlp"
-	"github.com/ethereumproject/go-ethereum/trie"
+	"github.com/VictoriumProject/go-victorium/common"
+	"github.com/VictoriumProject/go-victorium/core/vm"
+	"github.com/VictoriumProject/go-victorium/crypto"
+	"github.com/VictoriumProject/go-victorium/ethdb"
+	"github.com/VictoriumProject/go-victorium/logger"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
+	"github.com/VictoriumProject/go-victorium/rlp"
+	"github.com/VictoriumProject/go-victorium/trie"
 	lru "github.com/hashicorp/golang-lru"
 )
 
@@ -428,10 +428,10 @@ func (self *StateDB) createObject(addr common.Address) (newobj, prev *StateObjec
 	newobj.setNonce(StartingNonce) // sets the object to dirty
 	if prev == nil {
 		if logger.MlogEnabled() {
-			mlogState.Send(mlogStateCreateObject.SetDetailValues(
+			mlogStateCreateObject.AssignDetails(
 				newobj.address.Hex(),
 				prev,
-			))
+			).Send(mlogState)
 		}
 		if glog.V(logger.Detail) {
 			glog.Infof("(+) %x\n", addr)
@@ -439,10 +439,10 @@ func (self *StateDB) createObject(addr common.Address) (newobj, prev *StateObjec
 		self.journal = append(self.journal, createObjectChange{account: &addr})
 	} else {
 		if logger.MlogEnabled() {
-			mlogState.Send(mlogStateCreateObject.SetDetailValues(
+			mlogStateCreateObject.AssignDetails(
 				newobj.address.Hex(),
 				prev.address.Hex(),
-			))
+			).Send(mlogState)
 		}
 		self.journal = append(self.journal, resetObjectChange{prev: prev})
 	}

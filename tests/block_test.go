@@ -21,7 +21,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
 )
 
 func init() {

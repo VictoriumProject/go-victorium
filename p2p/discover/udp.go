@@ -25,11 +25,11 @@ import (
 	"net"
 	"time"
 
-	"github.com/ethereumproject/go-ethereum/crypto"
-	"github.com/ethereumproject/go-ethereum/logger"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
-	"github.com/ethereumproject/go-ethereum/p2p/nat"
-	"github.com/ethereumproject/go-ethereum/rlp"
+	"github.com/VictoriumProject/go-victorium/crypto"
+	"github.com/VictoriumProject/go-victorium/logger"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
+	"github.com/VictoriumProject/go-victorium/p2p/nat"
+	"github.com/VictoriumProject/go-victorium/rlp"
 )
 
 const Version = 4
@@ -332,7 +332,7 @@ func (t *udp) findnode(toid NodeID, toaddr *net.UDPAddr, target NodeID) ([]*Node
 	// attempted discoveries on reserved ips that are not on
 	// our node's network.
 	// > https://en.wikipedia.org/wiki/Reserved_IP_addresses
-	// > https://github.com/ethereumproject/go-ethereum/issues/283
+	// > https://github.com/VictoriumProject/go-victorium/issues/283
 	// > https://tools.ietf.org/html/rfc5737
 	// > https://tools.ietf.org/html/rfc3849
 	if !isReserved(toaddr.IP) {
@@ -509,25 +509,25 @@ func (t *udp) send(toaddr *net.UDPAddr, ptype byte, req interface{}) error {
 		switch ptype {
 		// @sorpass: again, performance penalty?
 		case pingPacket:
-			mlogDiscover.Send(mlogPingSendTo.SetDetailValues(
+			mlogPingSendTo.AssignDetails(
 				toaddr.String(),
 				len(packet),
-			))
+			).Send(mlogDiscover)
 		case pongPacket:
-			mlogDiscover.Send(mlogPongSendTo.SetDetailValues(
+			mlogPongSendTo.AssignDetails(
 				toaddr.String(),
 				len(packet),
-			))
+			).Send(mlogDiscover)
 		case findnodePacket:
-			mlogDiscover.Send(mlogFindNodeSendTo.SetDetailValues(
+			mlogFindNodeSendTo.AssignDetails(
 				toaddr.String(),
 				len(packet),
-			))
+			).Send(mlogDiscover)
 		case neighborsPacket:
-			mlogDiscover.Send(mlogNeighborsSendTo.SetDetailValues(
+			mlogNeighborsSendTo.AssignDetails(
 				toaddr.String(),
 				len(packet),
-			))
+			).Send(mlogDiscover)
 		}
 	}
 	if glog.V(logger.Detail) {
@@ -606,29 +606,29 @@ func (t *udp) handlePacket(from *net.UDPAddr, buf []byte) error {
 		// since packet is an interface with 1 method: handle.
 		switch p := fmt.Sprintf("%T", packet); p {
 		case "*discover.ping":
-			mlogDiscover.Send(mlogPingHandleFrom.SetDetailValues(
+			mlogPingHandleFrom.AssignDetails(
 				from.String(),
 				fromID.String(),
 				len(buf),
-			))
+			).Send(mlogDiscover)
 		case "*discover.pong":
-			mlogDiscover.Send(mlogPongHandleFrom.SetDetailValues(
+			mlogPongHandleFrom.AssignDetails(
 				from.String(),
 				fromID.String(),
 				len(buf),
-			))
+			).Send(mlogDiscover)
 		case "*discover.findnode":
-			mlogDiscover.Send(mlogFindNodeHandleFrom.SetDetailValues(
+			mlogFindNodeHandleFrom.AssignDetails(
 				from.String(),
 				fromID.String(),
 				len(buf),
-			))
+			).Send(mlogDiscover)
 		case "*discover.neighbors":
-			mlogDiscover.Send(mlogNeighborsHandleFrom.SetDetailValues(
+			mlogNeighborsHandleFrom.AssignDetails(
 				from.String(),
 				fromID.String(),
 				len(buf),
-			))
+			).Send(mlogDiscover)
 		}
 	}
 	if glog.V(logger.Detail) {

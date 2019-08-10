@@ -23,12 +23,12 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/ethereumproject/go-ethereum/common"
-	"github.com/ethereumproject/go-ethereum/core"
-	"github.com/ethereumproject/go-ethereum/core/types"
-	"github.com/ethereumproject/go-ethereum/logger"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
-	"github.com/ethereumproject/go-ethereum/metrics"
+	"github.com/VictoriumProject/go-victorium/common"
+	"github.com/VictoriumProject/go-victorium/core"
+	"github.com/VictoriumProject/go-victorium/core/types"
+	"github.com/VictoriumProject/go-victorium/logger"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
+	"github.com/VictoriumProject/go-victorium/metrics"
 	"gopkg.in/karalabe/cookiejar.v2/collections/prque"
 )
 
@@ -335,12 +335,12 @@ func (f *Fetcher) loop() {
 			if notification.number > 0 {
 				if dist := int64(notification.number) - int64(f.chainHeight()); dist < -maxUncleDist || dist > maxQueueDist {
 					if logger.MlogEnabled() {
-						mlogFetcher.Send(mlogFetcherDiscardAnnouncement.SetDetailValues(
+						mlogFetcherDiscardAnnouncement.AssignDetails(
 							notification.origin,
 							notification.number,
 							notification.hash.Str(),
 							dist,
-						))
+						).Send(mlogFetcher)
 					}
 					glog.V(logger.Debug).Infof("[eth/62] Peer %s: discarded announcement #%d [%s], distance %d", notification.origin, notification.number, notification.hash.Hex(), dist)
 					metrics.FetchAnnounceDrops.Mark(1)
@@ -636,12 +636,12 @@ func (f *Fetcher) enqueue(peer string, block *types.Block) {
 	}
 	if dist := int64(block.NumberU64()) - int64(f.chainHeight()); dist < -maxUncleDist || dist > maxQueueDist {
 		if logger.MlogEnabled() {
-			mlogFetcher.Send(mlogFetcherDiscardAnnouncement.SetDetailValues(
+			mlogFetcherDiscardAnnouncement.AssignDetails(
 				peer,
 				block.NumberU64(),
 				hash.Str(),
 				dist,
-			))
+			).Send(mlogFetcher)
 		}
 		glog.V(logger.Debug).Infof("Peer %s: discarded block #%d [%s], distance %d", peer, block.NumberU64(), hash.Hex(), dist)
 		metrics.FetchBroadcastDrops.Mark(1)

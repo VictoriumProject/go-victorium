@@ -1,23 +1,10 @@
-[![Build Status](https://travis-ci.org/ethereumproject/go-ethereum.svg?branch=master)](https://travis-ci.org/ethereumproject/go-ethereum)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/ethereumproject/go-ethereum?svg=true)](https://ci.appveyor.com/project/splix/go-ethereum)
-[![API Reference](https://camo.githubusercontent.com/915b7be44ada53c290eb157634330494ebe3e30a/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f676f6c616e672f6764646f3f7374617475732e737667
-)](https://godoc.org/github.com/ethereumproject/go-ethereum)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ethereumproject/go-ethereum?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-## Ethereum Go (Ethereum Classic Blockchain)
+## Victorium Go (Victorium Blockchain)
 
-Official Go language implementation of the Ethereum protocol supporting the
-_original_ chain. Ethereum Classic (ETC) offers a censorship-resistant and powerful application platform for developers in parallel to Ethereum (ETHF), while differentially rejecting the DAO bailout.
+Official Go language implementation of the Victorium protocol supporting the
+_original_ chain. Victorium (VIC) offers a censorship-resistant and powerful application platform for developers in parallel to Victorium, while differentially rejecting the DAO bailout.
 
 ## Install
-
-### :rocket: From a release binary
-The simplest way to get started running a node is to visit our [Releases page](https://github.com/ethereumproject/go-ethereum/releases) and download a zipped executable binary (matching your operating system, of course), then moving the unzipped file `geth` to somewhere in your `$PATH`. Now you should be able to open a terminal and run `$ geth help` to make sure it's working. For additional installation instructions please check out the [Installation Wiki](https://github.com/ethereumproject/go-ethereum/wiki/Home#Developers).
-
-#### :beers: Using Homebrew (OSX only)
-```
-$ brew install ethereumproject/classic/geth
-```
 
 ### :hammer: Building the source
 
@@ -27,81 +14,17 @@ If your heart is set on the bleeding edge, install from source. However, please 
 Building geth requires both Go >=1.9 and a C compiler.
 
 #### Get source and dependencies
-`$ go get -v github.com/ethereumproject/go-ethereum/...`
+`$ go get -v github.com/VictoriumProject/go-victorium/...`
 
 #### Installing command executables
 
 To install...
 
-- the full suite of utilities: `$ go install github.com/ethereumproject/go-ethereum/cmd/...`
-- just __geth__: `$ go install github.com/ethereumproject/go-ethereum/cmd/geth`
+- the full suite of utilities: `$ go install github.com/VictoriumProject/go-victorium/cmd/...`
+- just __geth__: `$ go install github.com/VictoriumProject/go-victorium/cmd/geth`
 
 Executables built from source will, by default, be installed in `$GOPATH/bin/`.
 
-#### Building specific release
-All the above commands results with building binaries from `HEAD`. To use a specific release/tag, use the following:
-```
-$ go get -d github.com/ethereumproject/go-ethereum/...
-$ cd $GOPATH/src/github.com/ethereumproject/go-ethereum
-$ git checkout <TAG OR REVISION>
-$ go install -ldflags "-X main.Version="`git describe --tags` ./cmd/...
-```
-
-#### Using release source code tarball
-Because of strict Go directory structure, the tarball needs to be extracted into the proper subdirectory under `$GOPATH`.
-The following commands are an example of building the v4.1.1 release:
-```
-$ mkdir -p $GOPATH/src/github.com/ethereumproject
-$ cd $GOPATH/src/github.com/ethereumproject
-$ tar xzf /path/to/go-ethereum-4.1.1.tar.gz
-$ mv go-ethereum-4.1.1 go-ethereum
-$ cd go-ethereum
-$ go install -ldflags "-X main.Version=v4.1.1" ./cmd/...
-```
-
-#### Building with [SputnikVM](https://github.com/ethereumproject/sputnikvm)
-Have Rust (>= 1.21) and Golang (>= 1.9) installed.
-
-> For __Linux__ and __macOS__:
-
-```
-cd $GOPATH/src/github.com/ethereumproject
-git clone https://github.com/ethereumproject/sputnikvm-ffi
-cd sputnikvm-ffi/c/ffi
-cargo build --release
-cp $GOPATH/src/github.com/ethereumproject/sputnikvm-ffi/c/ffi/target/release/libsputnikvm_ffi.a $GOPATH/src/github.com/ethereumproject/sputnikvm-ffi/c/libsputnikvm.a
-```
-And then build geth with CGO_LDFLAGS:
-
-- In Linux:
-
-```
-cd $GOPATH/src/github.com/ethereumproject/go-ethereum/cmd/geth
-CGO_LDFLAGS="$GOPATH/src/github.com/ethereumproject/sputnikvm-ffi/c/libsputnikvm.a -ldl" go build -tags=sputnikvm .
-```
-
-- In macOS:
-
-```
-cd $GOPATH/src/github.com/ethereumproject/go-ethereum/cmd/geth
-CGO_LDFLAGS="$GOPATH/src/github.com/ethereumproject/sputnikvm-ffi/c/libsputnikvm.a -ldl -lresolv" go build -tags=sputnikvm .
-```
-
-> For __Windows__:
-
-```
-cd %GOPATH%\src\github.com\ethereumproject
-git clone https://github.com/ethereumproject/sputnikvm-ffi
-cd sputnikvm-ffi\c\ffi
-cargo build --release
-copy %GOPATH%\src\github.com\ethereumproject\sputnikvm-ffi\c\ffi\target\release\sputnikvm.lib %GOPATH%\src\github.com\ethereumproject\sputnikvm-ffi\c\sputnikvm.lib
-```
-And then build geth with CGO_LDFLAGS:
-```
-cd %GOPATH%\src\github.com\ethereumproject\go-ethereum\cmd\geth
-set CGO_LDFLAGS=-Wl,--allow-multiple-definition %GOPATH%\src\github.com\ethereumproject\sputnikvm-ffi\c\sputnikvm.lib -lws2_32 -luserenv
-go build -tags=sputnikvm .
-```
 
 ## Executables
 
@@ -109,13 +32,13 @@ This repository includes several wrappers/executables found in the `cmd` directo
 
 | Command    | Description |
 |:----------:|-------------|
-| **`geth`** | The main Ethereum CLI client. It is the entry point into the Ethereum network (main-, test-, or private net), capable of running as a full node (default) archive node (retaining all historical state) or a light node (retrieving data live). It can be used by other processes as a gateway into the Ethereum network via JSON RPC endpoints exposed on top of HTTP, WebSocket and/or IPC transports. Please see our [Command Line Options](https://github.com/ethereumproject/go-ethereum/wiki/Command-Line-Options) wiki page for details. |
-| `abigen` | Source code generator to convert Ethereum contract definitions into easy to use, compile-time type-safe Go packages. It operates on plain [Ethereum contract ABIs](https://github.com/ethereumproject/wiki/wiki/Ethereum-Contract-ABI) with expanded functionality if the contract bytecode is also available. However it also accepts Solidity source files, making development much more streamlined. Please see our [Native DApps](https://github.com/ethereumproject/go-ethereum/wiki/Native-DApps-in-Go) wiki page for details. |
-| `bootnode` | Stripped down version of our Ethereum client implementation that only takes part in the network node discovery protocol, but does not run any of the higher level application protocols. It can be used as a lightweight bootstrap node to aid in finding peers in private networks. |
-| `disasm` | Bytecode disassembler to convert EVM (Ethereum Virtual Machine) bytecode into more user friendly assembly-like opcodes (e.g. `echo "6001" | disasm`). For details on the individual opcodes, please see pages 22-30 of the [Ethereum Yellow Paper](http://gavwood.com/paper.pdf). |
+| **`geth`** | The main Victorium CLI client. It is the entry point into the Victorium network (main-, test-, or private net), capable of running as a full node (default) archive node (retaining all historical state) or a light node (retrieving data live). It can be used by other processes as a gateway into the Victorium network via JSON RPC endpoints exposed on top of HTTP, WebSocket and/or IPC transports. Please see our [Command Line Options](https://github.com/ethereumproject/go-ethereum/wiki/Command-Line-Options) wiki page for details. |
+| `abigen` | Source code generator to convert Victorium contract definitions into easy to use, compile-time type-safe Go packages. It operates on plain [Victorium contract ABIs](https://github.com/ethereumproject/wiki/wiki/Ethereum-Contract-ABI) with expanded functionality if the contract bytecode is also available. However it also accepts Solidity source files, making development much more streamlined. Please see our [Native DApps](https://github.com/ethereumproject/go-ethereum/wiki/Native-DApps-in-Go) wiki page for details. |
+| `bootnode` | Stripped down version of our Victorium client implementation that only takes part in the network node discovery protocol, but does not run any of the higher level application protocols. It can be used as a lightweight bootstrap node to aid in finding peers in private networks. |
+| `disasm` | Bytecode disassembler to convert EVM (Ethereum Virtual Machine) bytecode into more user friendly assembly-like opcodes (e.g. `echo "6001" | disasm`). For details on the individual opcodes, please see pages 22-30 of the [Victorium Yellow Paper](http://gavwood.com/paper.pdf). |
 | `evm` | Developer utility version of the EVM (Ethereum Virtual Machine) that is capable of running bytecode snippets within a configurable environment and execution mode. Its purpose is to allow insolated, fine graned debugging of EVM opcodes (e.g. `evm --code 60ff60ff --debug`). |
-| `gethrpctest` | Developer utility tool to support our [ethereum/rpc-test](https://github.com/ethereumproject/rpc-tests) test suite which validates baseline conformity to the [Ethereum JSON RPC](https://github.com/ethereumproject/wiki/wiki/JSON-RPC) specs. Please see the [test suite's readme](https://github.com/ethereumproject/rpc-tests/blob/master/README.md) for details. |
-| `rlpdump` | Developer utility tool to convert binary RLP ([Recursive Length Prefix](https://github.com/ethereumproject/wiki/wiki/RLP)) dumps (data encoding used by the Ethereum protocol both network as well as consensus wise) to user friendlier hierarchical representation (e.g. `rlpdump --hex CE0183FFFFFFC4C304050583616263`). |
+| `gethrpctest` | Developer utility tool to support our [ethereum/rpc-test](https://github.com/ethereumproject/rpc-tests) test suite which validates baseline conformity to the [Victorium JSON RPC](https://github.com/ethereumproject/wiki/wiki/JSON-RPC) specs. Please see the [test suite's readme](https://github.com/ethereumproject/rpc-tests/blob/master/README.md) for details. |
+| `rlpdump` | Developer utility tool to convert binary RLP ([Recursive Length Prefix](https://github.com/ethereumproject/wiki/wiki/RLP)) dumps (data encoding used by the Victorium protocol both network as well as consensus wise) to user friendlier hierarchical representation (e.g. `rlpdump --hex CE0183FFFFFFC4C304050583616263`). |
 
 ## :green_book: Geth: the basics
 

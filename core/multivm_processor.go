@@ -6,13 +6,13 @@ import (
 	"math/big"
 
 	"github.com/ethereumproject/sputnikvm-ffi/go/sputnikvm"
-	"github.com/ethereumproject/go-ethereum/common"
-	"github.com/ethereumproject/go-ethereum/core/state"
-	"github.com/ethereumproject/go-ethereum/core/types"
-	evm "github.com/ethereumproject/go-ethereum/core/vm"
-	"github.com/ethereumproject/go-ethereum/crypto"
-	"github.com/ethereumproject/go-ethereum/logger"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
+	"github.com/VictoriumProject/go-victorium/common"
+	"github.com/VictoriumProject/go-victorium/core/state"
+	"github.com/VictoriumProject/go-victorium/core/types"
+	evm "github.com/VictoriumProject/go-victorium/core/vm"
+	"github.com/VictoriumProject/go-victorium/crypto"
+	"github.com/VictoriumProject/go-victorium/logger"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
 )
 
 const SputnikVMExists = true
@@ -52,14 +52,37 @@ func ApplyMultiVmTransaction(config *ChainConfig, bc *BlockChain, gp *GasPool, s
 	eip160Fork := config.ForkByName("Diehard")
 
 	var vm *sputnikvm.VM
-	if eip160Fork.Block != nil && currentNumber.Cmp(eip160Fork.Block) >= 0 {
-		vm = sputnikvm.NewEIP160(&vmtx, &vmheader)
-	} else if eip150Fork.Block != nil && currentNumber.Cmp(eip150Fork.Block) >= 0 {
-		vm = sputnikvm.NewEIP150(&vmtx, &vmheader)
-	} else if homesteadFork.Block != nil && currentNumber.Cmp(homesteadFork.Block) >= 0 {
-		vm = sputnikvm.NewHomestead(&vmtx, &vmheader)
+	if state.StartingNonce == 0 {
+		if eip160Fork.Block != nil && currentNumber.Cmp(eip160Fork.Block) >= 0 {
+			vm = sputnikvm.NewEIP160(&vmtx, &vmheader)
+		} else if eip150Fork.Block != nil && currentNumber.Cmp(eip150Fork.Block) >= 0 {
+			vm = sputnikvm.NewEIP150(&vmtx, &vmheader)
+		} else if homesteadFork.Block != nil && currentNumber.Cmp(homesteadFork.Block) >= 0 {
+			vm = sputnikvm.NewHomestead(&vmtx, &vmheader)
+		} else {
+			vm = sputnikvm.NewFrontier(&vmtx, &vmheader)
+		}
+	} else if state.StartingNonce == 1048576 {
+		if eip160Fork.Block != nil && currentNumber.Cmp(eip160Fork.Block) >= 0 {
+			vm = sputnikvm.NewMordenEIP160(&vmtx, &vmheader)
+		} else if eip150Fork.Block != nil && currentNumber.Cmp(eip150Fork.Block) >= 0 {
+			vm = sputnikvm.NewMordenEIP150(&vmtx, &vmheader)
+		} else if homesteadFork.Block != nil && currentNumber.Cmp(homesteadFork.Block) >= 0 {
+			vm = sputnikvm.NewMordenHomestead(&vmtx, &vmheader)
+		} else {
+			vm = sputnikvm.NewMordenFrontier(&vmtx, &vmheader)
+		}
 	} else {
-		vm = sputnikvm.NewFrontier(&vmtx, &vmheader)
+		sputnikvm.SetCustomInitialNonce(big.NewInt(int64(state.StartingNonce)))
+		if eip160Fork.Block != nil && currentNumber.Cmp(eip160Fork.Block) >= 0 {
+			vm = sputnikvm.NewCustomEIP160(&vmtx, &vmheader)
+		} else if eip150Fork.Block != nil && currentNumber.Cmp(eip150Fork.Block) >= 0 {
+			vm = sputnikvm.NewCustomEIP150(&vmtx, &vmheader)
+		} else if homesteadFork.Block != nil && currentNumber.Cmp(homesteadFork.Block) >= 0 {
+			vm = sputnikvm.NewCustomHomestead(&vmtx, &vmheader)
+		} else {
+			vm = sputnikvm.NewCustomFrontier(&vmtx, &vmheader)
+		}
 	}
 
 Loop:

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"math/big"
-	"github.com/ethereumproject/go-ethereum/common"
+	"github.com/VictoriumProject/go-victorium/common"
 	"github.com/ethereumproject/sputnikvm-ffi/go/sputnikvm"
 )
 

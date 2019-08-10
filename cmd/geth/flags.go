@@ -8,12 +8,12 @@ import (
 
 	"path/filepath"
 
-	"github.com/ethereumproject/go-ethereum/common"
-	"github.com/ethereumproject/go-ethereum/core"
-	"github.com/ethereumproject/go-ethereum/eth"
-	"github.com/ethereumproject/go-ethereum/logger"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
-	"github.com/ethereumproject/go-ethereum/rpc"
+	"github.com/VictoriumProject/go-victorium/common"
+	"github.com/VictoriumProject/go-victorium/core"
+	"github.com/VictoriumProject/go-victorium/eth"
+	"github.com/VictoriumProject/go-victorium/logger"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
+	"github.com/VictoriumProject/go-victorium/rpc"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -26,6 +26,16 @@ import (
 
 var (
 	// General settings
+	PprofFlag = cli.IntFlag{
+		Name:  "pprof",
+		Usage: "Enable runtime profiling with web interface",
+		Value: 0,
+	}
+	PprofIntervalFlag = cli.IntFlag{
+		Name:  "pprof-interval",
+		Usage: "Set interval in seconds for runtime profiling",
+		Value: 5,
+	}
 	SputnikVMFlag = cli.BoolFlag{
 		Name:  "sputnikvm",
 		Usage: "Use SputnikVM Ethereum Virtual Machine implementation",
@@ -332,7 +342,7 @@ var (
 	ListenPortFlag = cli.IntFlag{
 		Name:  "port",
 		Usage: "Network listening port",
-		Value: 30303,
+		Value: 30322,
 	}
 	BootnodesFlag = cli.StringFlag{
 		Name:  "bootnodes",

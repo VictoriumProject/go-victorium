@@ -30,14 +30,14 @@ import (
 	"path/filepath"
 	"reflect"
 
-	"github.com/ethereumproject/go-ethereum/common"
-	"github.com/ethereumproject/go-ethereum/core/state"
-	"github.com/ethereumproject/go-ethereum/core/types"
-	"github.com/ethereumproject/go-ethereum/core/vm"
-	"github.com/ethereumproject/go-ethereum/ethdb"
-	"github.com/ethereumproject/go-ethereum/logger"
-	"github.com/ethereumproject/go-ethereum/logger/glog"
-	"github.com/ethereumproject/go-ethereum/p2p/discover"
+	"github.com/VictoriumProject/go-victorium/common"
+	"github.com/VictoriumProject/go-victorium/core/state"
+	"github.com/VictoriumProject/go-victorium/core/types"
+	"github.com/VictoriumProject/go-victorium/core/vm"
+	"github.com/VictoriumProject/go-victorium/ethdb"
+	"github.com/VictoriumProject/go-victorium/logger"
+	"github.com/VictoriumProject/go-victorium/logger/glog"
+	"github.com/VictoriumProject/go-victorium/p2p/discover"
 	"io"
 	"strings"
 )
@@ -261,19 +261,12 @@ func (c *ChainConfig) GetChainID() *big.Int {
 
 // IsHomestead returns whether num is either equal to the homestead block or greater.
 func (c *ChainConfig) IsHomestead(num *big.Int) bool {
-	if c.ForkByName("Homestead").Block == nil || num == nil {
-		return false
-	}
-	return num.Cmp(c.ForkByName("Homestead").Block) >= 0
+	return true;
 }
 
 // IsDiehard returns whether num is greater than or equal to the Diehard block, but less than explosion.
 func (c *ChainConfig) IsDiehard(num *big.Int) bool {
-	fork := c.ForkByName("Diehard")
-	if fork.Block == nil || num == nil {
-		return false
-	}
-	return num.Cmp(fork.Block) >= 0
+	return true;
 }
 
 // IsExplosion returns whether num is either equal to the explosion block or greater.

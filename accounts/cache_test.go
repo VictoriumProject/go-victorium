@@ -19,7 +19,7 @@ package accounts
 import (
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/ethereumproject/go-ethereum/common"
+	"github.com/VictoriumProject/go-victorium/common"
 	"io/ioutil"
 	"math/rand"
 	"os"

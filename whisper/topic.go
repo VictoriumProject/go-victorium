@@ -19,7 +19,7 @@
 
 package whisper
 
-import "github.com/ethereumproject/go-ethereum/crypto"
+import "github.com/VictoriumProject/go-victorium/crypto"
 
 // Topic represents a cryptographically secure, probabilistic partial
 // classifications of a message, determined as the first (left) 4 bytes of the

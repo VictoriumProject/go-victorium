@@ -20,7 +20,7 @@ package accounts
 
 import (
 	"fmt"
-	"github.com/ethereumproject/go-ethereum/common"
+	"github.com/VictoriumProject/go-victorium/common"
 	"os"
 	"strings"
 	"time"
